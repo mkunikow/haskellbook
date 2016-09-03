@@ -1,3 +1,7 @@
+# Chgapter 4 Exercises
+
+## 4.7.ChapterExercises
+
 awesome = ["Papuchon", "curry", ":)"]
 alsoAwesome = ["Quake", "The Simons"]
 allAwesome = [awesome, alsoAwesome]
@@ -50,9 +54,93 @@ c) length allAwesome + length awesome -> 5
 d) (8 == 8) && ('b' < 'a')            -> False
 e) (8 == 8) && 9                      -> Error 9 is not type Bool
 
+## 4.7.CorrectingSyntax.md
+
+Correcting syntax
+In the following examples, you’ll be shown syntactically incorrect
+code. Type it in and try to correct it in your text editor, validating it
+with GHC or GHCi.
+
+1. Here, we want a function that adds 1 to the length of a string
+argument and returns that result.
+
+```
+x = (+)
+F xs = w 'x' 1
+where w = length xs
+```
+
+Fix:
+
+```
+x = (+)
+let f xs = x w 1 where w = length xs
+```
+
+2. This is supposed to be the identity function, id.
+
+```
+\ X = x
+```
+
+Fix
+
+```
+\x -> x
+```
 
 
+3. When fixed, this function will return 1 from the value [1, 2, 3].
+Hint: you may need to refer back to the section about variables
+conventions in “Hello Haskell” to refresh your memory of this
+notation.
 
+```
+\ x : xs -> x
+```
 
+Fix
+
+```
+\ (x : xs) -> x
+```
+
+4. When fixed, this function will return 1 from the value (1, 2).
+
+```
+f (a b) = A
+```
+
+Fix
+
+```
+f (a, b) = a
+```
+## 4.7.MatchTheFunctionsToTheirTypes
+
+## Match the function names to their types
+
+1. Which of the following types is the type of show?
+a) show a => a -> String
+b) Show a -> a -> String
+c) Show a => a -> String (x)
+
+2. Which of the following types is the type of (==)?
+a) a -> a -> Bool
+b) Eq a => a -> a -> Bool (x)
+c) Eq a -> a -> a -> Bool
+d) Eq a => A -> Bool
+
+3. Which of the following types is the type of fst?
+a) (a, b) -> a (x)
+b) b -> a
+c) (a, b) -> b
+
+4. Which of the following types is the type of (+)?
+a) Num a -> a -> a -> Bool
+b) Num a => a -> a -> Bool
+c) num a => a -> a -> a
+d) Num a => a -> a -> a   (x)
+e) a -> a -> a
 
 

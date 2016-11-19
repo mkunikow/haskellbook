@@ -70,6 +70,77 @@ lambda syntax:
    mflipNoLamda f x y = f y x 
    ```
 
+# Exercises: Variety Pack
+
+1. Given the following declarations
+
+```haskell
+k (x, y) = x
+k1 = k ((4-1), 10)
+k2 = k ("three", (1 + 2))
+k3 = k (3, True)
+```
+
+   * a) What is the type of k?
+   `k::(x,y) -> x`
+   * b) What is the type of k2? Is it the same type as k1 or k3?
+   `k1:Num k2::String k3::Num`
+   * c) Of k1, k2, k3, which will return the number 3 as the result? 
+   `k1, k3` 
+
+2. Fill in the definition of the following function:
+
+```haskell
+-- Remember: Tuples have the same syntax for their
+-- type constructors and their data constructors.
+f :: (a, b, c) -> (d, e, f) -> ((a, d), (c, f))
+f (a, b, c) (d, e, f) = ((a, d), (c, f))
+```
+
+# Exercises: Case Practice
+
+First, rewrite if-then-else expressions into case expressions.
+
+1. The following should return x when x is greater than y.
+
+```haskell
+functionC x y = if (x > y) then x else y
+
+functionC x y = 
+    case x > y of
+        True  -> x
+        False -> y
+```
+2. The following will add 2 to even numbers and otherwise simply
+return the input value.
+
+```haskell
+ifEvenAdd2 n = if even n then (n+2) else n
+ifEvenAdd2 n =
+    case even n of
+        True  -> n + 2
+        False -> n
+```
+
+3. The following compares a value, x, to zero and returns an indi-
+cator for whether x is a postive number or negative number. But
+what if x is 0? You may need to play with the compare function a
+bit to find what to do.
+
+```haskell
+ nums x =
+    case compare x 0 of
+        LT -> -1
+        GT -> 1
+        EQ -> 0
+```
+
+
+
+
+
+
+
   
    
 

@@ -18,7 +18,7 @@ ceasarChar n c
 unCeasar :: Int -> String -> String
 unCeasar n  = map $ unCeasarChar n
 
-unCeasarChar :: Int -> Char ->Char
+unCeasarChar :: Int -> Char -> Char
 unCeasarChar n c
     | shifted < min = chr $ shifted + range
     | otherwise = chr shifted

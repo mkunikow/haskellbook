@@ -80,6 +80,79 @@ data Example3 a = MakeExample3 a deriving Show
 MakeExample3 :: a -> Example3 a
 ```
 
+# Exercises: Pity the Bool
+
+1. Given a datatype
+
+```haskell
+data BigSmall =
+Big Bool
+| Small Bool
+deriving (Eq, Show)
+```
+
+Cardinality of BigSmall: 2 + 2 = 4
+
+2. Given a datatype
+
+```haskell
+import Data.Int
+
+data NumberOrBool =
+Numba Int8
+| BoolyBool Bool
+deriving (Eq, Show)
+
+```
+Cardinality of NumberOrBool = 2^8 + 2 = 258
+
+# Exercises: How Does Your Garden Grow?
+
+1. Given the type
+
+```haskell
+data FlowerType = Gardenia
+    | Daisy
+    | Rose
+    | Lilac
+    deriving Show
+
+type Gardener = String
+
+data Garden =
+    Garden Gardener FlowerType
+    deriving Show
+
+```
+Answear:
+
+```haskell
+data Garden = Gardenia Gardener
+    | Daisy Gardener
+    | Rose Garden
+    | Lilac Garden
+    deriving Show
+```
+# Exercises: The Quad
+1.
+```haskell
+data Quad =
+    One
+    | Two
+    | Three
+    | Four
+    deriving (Eq, Show)
+
+eQuad = 4 + 4 = 8
+
+``` 
+2. `prodQuad :: (Quad, Quad)` -> 4 * 4 = 16
+3. `funcQuad :: Quad -> Quad` -> 4 ^ 4
+4. `prodTBool :: (Bool, Bool, Bool)` -> 2 * 2 * 2 = 8
+5. `gTwo :: Bool -> Bool -> Bool` -> 2 ^ (2 * 2)
+6. `fTwo :: Bool -> Quad -> Quad` -> 4 ^ (2 * 4)
+
+
 
 
 

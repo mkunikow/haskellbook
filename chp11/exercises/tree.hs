@@ -40,35 +40,28 @@ mapOkay =
 -- your implementation passes the tests.
 
 preorder :: BinaryTree a -> [a]
-preorder t = preorderacc t []
 
+preorder Leaf  = []
+preorder (Node left a right)  = 
+    a : preorder left 
+    ++ preorder right
 
-preorderacc :: BinaryTree a -> [a] -> [a]
-preorderacc Leaf acc = acc
-preorderacc (Node left a right) acc = 
-    a : acc 
-    ++ preorderacc left acc 
-    ++ preorderacc right acc
 
 inorder :: BinaryTree a -> [a]
-inorder t = inorderacc t []
 
-inorderacc :: BinaryTree a -> [a] -> [a]
-inorderacc Leaf acc = acc
-inorderacc (Node left a right) acc = 
-    inorderacc left acc 
-    ++ a : acc 
-    ++ inorderacc right acc
+inorder Leaf = []
+inorder (Node left a right) = 
+    inorder left
+    ++ [a]
+    ++ inorder right
 
 postorder :: BinaryTree a -> [a]
-postorder t = postorderacc t []
 
-postorderacc :: BinaryTree a -> [a] -> [a]
-postorderacc Leaf acc = acc
-postorderacc (Node left a right) acc = 
-    postorderacc left acc 
-    ++ postorderacc right acc 
-    ++ a : acc
+postorder Leaf  = []
+postorder (Node left a right)  = 
+    postorder left 
+    ++ postorder right 
+    ++ [a] 
 
 testTree :: BinaryTree Integer
 testTree = Node (Node Leaf 1 Leaf) 2 (Node Leaf 3 Leaf)

@@ -31,7 +31,6 @@ test-suite tests-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  -- main-is:             WordNumber/WordNumberTest.hs
   build-depends:       base
                      , tests
                      , hspec

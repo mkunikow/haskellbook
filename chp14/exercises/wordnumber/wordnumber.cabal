@@ -1,4 +1,4 @@
-name:                tests
+name:                wordnumber
 version:             0.1.0.0
 -- synopsis:
 -- description:
@@ -24,7 +24,7 @@ executable tests
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
-                     , tests
+                     , wordnumber
   default-language:    Haskell2010
 
 test-suite tests-test
@@ -32,7 +32,7 @@ test-suite tests-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
-                     , tests
+                     , wordnumber
                      , hspec
                      , QuickCheck
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N

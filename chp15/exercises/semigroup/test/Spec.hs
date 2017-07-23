@@ -29,16 +29,30 @@ instance Semigroup a => Semigroup (Identity a) where
     (Identity a) <> (Identity b) = Identity (a <> b)
 
 
-instance (Semigroup a, Arbitrary a) => Arbitrary (Identity a) where
+instance (Arbitrary a) => Arbitrary (Identity a) where
     arbitrary = do
         a <- arbitrary
         return (Identity a)
 
 type IdentityAssoc = Identity String -> Identity String -> Identity String -> Bool
 
+-- 3
+data Two a b = Two a b deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b) => Semigroup (Two a b) where
+    (Two a b) <> (Two c d) = Two (a <> c) ( b <> d)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
+    arbitrary = do
+        a <- arbitrary
+        b <- arbitrary
+        return (Two a b)
+
+type TwoAssoc = Two String String -> Two String String -> Two String String -> Bool
 main :: IO ()
 main = do
     quickCheck (semigroupAssoc :: TrivialAssoc)
     quickCheck (semigroupAssoc :: IdentityAssoc)
+    quickCheck (semigroupAssoc :: TwoAssoc)
  
 

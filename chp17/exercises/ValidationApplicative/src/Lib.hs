@@ -28,7 +28,7 @@ instance Monoid e => Applicative (Validation e) where
     Failure e1 <*> Failure e2 = Failure (e1 <> e2)
 
 -- TODO check why this is an error
--- success = Success (+1) <*> Success (1:: Int)
+--success = Success (+1) <*> Success 1 :: (Num b, Monoid e) => Validation e b
 
 failure = Success (+1) <*> Failure [StackOverflow]
 failure' = Failure [StackOverflow] <*> Success (+1)

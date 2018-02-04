@@ -17,6 +17,8 @@ If you find it usefull please add start :)
 ### Other solutions
 [https://github.com/CarlosMChica/haskell-book-readers-exercises](http://github.com/CarlosMChica/haskell-book-readers-exercises)
 
+[https://twitter.com/CarlosMChica/status/941435874163724289](https://twitter.com/CarlosMChica/status/941435874163724289)
+
 ### Slack channel
 
 [Join functional programming on Slack!](https://fpchat-invite.herokuapp.com/) channel `haskellbook`

@@ -4,7 +4,7 @@ If you find it usefull please add start :)
 
 ## Note
 
- some examples requires global install quick check
+ some examples require global install quick check
 
  ```haskell
  cabal install QuickCheck

@@ -50,9 +50,13 @@ instance Applicative List where
 instance Eq a => EqProp (List a) where
   (=-=) = eq
 
+-- instance Arbitrary a => Arbitrary (List a) where
+--     arbitrary =
+--       sized arbitrarySizedList
+
+      
 instance Arbitrary a => Arbitrary (List a) where
-    arbitrary =
-      sized arbitrarySizedList
+    arbitrary = Cons <$> arbitrary <*> arbitrary
   
 arbitrarySizedList :: Arbitrary a => Int -> Gen (List a)
 arbitrarySizedList m

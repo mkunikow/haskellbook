@@ -1,6 +1,8 @@
 module Exercises where
 
 import Data.Monoid  
+import Control.Monad  
+import Data.Maybe
 import Test.QuickCheck
 import Test.QuickCheck.Checkers
 import Test.QuickCheck.Classes
@@ -135,3 +137,35 @@ main = do
   quickBatch (applicative identityTrigger)
   quickBatch (applicative triggerList)
   quickBatch (monad triggerList)
+
+
+-- 1
+j :: Monad m => m (m a) -> m a
+j  = join
+
+j' :: Monad m => m (m a) -> m a
+j'  = (=<<) id
+
+-- 2
+l1 :: Monad m => (a -> b) -> m a -> m b
+l1 = fmap
+
+-- 3
+l2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
+l2 = liftM2
+
+-- 4
+a :: Monad m => m a -> m (a -> b) -> m b
+a = flip (<*>)
+
+-- 5
+meh :: Monad m => [a] -> (a -> m b) -> m [b]
+meh xs f = foldr f' ( return [] ) xs 
+            where f' x  = liftM2 (:) (f x)
+
+-- usage:  meh [1..5] Just
+-- result: Just [1,2,3,4,5]
+  
+-- 6
+flipType :: (Monad m) => [m a] -> m [a]
+flipType   = flip meh id      

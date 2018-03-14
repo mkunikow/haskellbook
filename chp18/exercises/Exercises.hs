@@ -145,6 +145,10 @@ j  = join
 
 j' :: Monad m => m (m a) -> m a
 j'  = (=<<) id
+-- `(=<<) id :: Monad m => m (m b) -> m b` where `(=<<) :: Monad m => (a -> m b) -> m a -> m b`, `id :: a -> a`
+-- signature  `Monad m => (a -> m b)` if we paste here `id` this must be  `Monad m => (m b -> m b)`
+-- If we replace `a = m b` in `m a` becomes `m (m b)`
+
 
 -- 2
 l1 :: Monad m => (a -> b) -> m a -> m b

@@ -59,6 +59,25 @@ instance Traversable Optional where
     traverse f (Yep a) = Yep <$> f a
     traverse _ Nada =  pure Nada
 
+-- List
+
+data List a =
+    Nil
+    | Cons a (List a) deriving (Eq, Ord, Show)
+
+instance Functor List where
+    fmap _ Nil = Nil
+    fmap f (Cons a t) = Cons (f a) (fmap f t)
+
+instance Foldable List where
+    foldMap _ Nil  = mempty
+    foldMap f (Cons a t) = f a <> foldMap f t
+
+instance Traversable List where
+    traverse _ Nil =  pure Nil
+    traverse f (Cons a t) = Cons <$> f a <*> traverse f t
+    
+
 -- QuickCheck
 
 instance Arbitrary a => Arbitrary (Identity a) where
@@ -69,6 +88,9 @@ instance Arbitrary a => Arbitrary (Constant a b) where
 
 instance Arbitrary a => Arbitrary (Optional a) where
     arbitrary = frequency [(1, return Nada), (3, Yep <$> arbitrary)]
+ 
+instance Arbitrary a => Arbitrary (List a) where
+    arbitrary = oneof [return Nil, Cons <$> arbitrary <*> arbitrary]
 
 instance Eq a => EqProp (Identity a) where
     (=-=) = eq
@@ -79,12 +101,18 @@ instance Eq a => EqProp (Constant a b) where
 instance Eq a => EqProp (Optional a) where
     (=-=) = eq
 
+instance Eq a => EqProp (List a) where
+    (=-=) = eq
+
+
 identityTrigger = undefined :: Identity (Int, Int, [Int])
 constantTrigger = undefined :: Constant (Int, Int, [Int]) (Int, Int, [Int])
 optionalTrigger = undefined :: Optional (Int, Int, [Int])
+listTrigger     = undefined :: List (Int, Int, [Int])
 
 main :: IO ()
 main = do
   quickBatch (traversable identityTrigger)
   quickBatch (traversable constantTrigger)
   quickBatch (traversable optionalTrigger)
+  quickBatch (traversable listTrigger)

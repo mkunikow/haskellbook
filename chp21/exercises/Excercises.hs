@@ -2,6 +2,7 @@ module Exercises where
 
 import Data.Monoid  
 import Control.Monad  
+import Control.Applicative
 import Test.QuickCheck
 import Test.QuickCheck.Checkers
 import Test.QuickCheck.Classes
@@ -59,7 +60,7 @@ instance Traversable Optional where
     traverse f (Yep a) = Yep <$> f a
     traverse _ Nada =  pure Nada
 
--- List
+-- 4. List
 
 data List a =
     Nil
@@ -78,6 +79,20 @@ instance Traversable List where
     traverse f (Cons a t) = Cons <$> f a <*> traverse f t
     
 
+-- 5. Three
+data Three a b c = Three a b c deriving (Eq, Ord, Show)
+
+instance Functor (Three a b) where
+    fmap f (Three a b c) = Three a b (f c)
+
+instance Foldable (Three a b) where
+    foldMap f (Three a b c) = f c
+
+instance Traversable (Three a b ) where
+    -- traverse f (Three a b c) = Three <$> pure a <*> pure b <*> f c
+    traverse f (Three a b c) = liftA3 Three (pure a) (pure b) (f c)
+    
+
 -- QuickCheck
 
 instance Arbitrary a => Arbitrary (Identity a) where
@@ -92,6 +107,9 @@ instance Arbitrary a => Arbitrary (Optional a) where
 instance Arbitrary a => Arbitrary (List a) where
     arbitrary = oneof [return Nil, Cons <$> arbitrary <*> arbitrary]
 
+instance (Arbitrary a, Arbitrary b, Arbitrary c) => Arbitrary (Three a b c ) where
+    arbitrary = liftA3 Three arbitrary arbitrary arbitrary
+
 instance Eq a => EqProp (Identity a) where
     (=-=) = eq
       
@@ -104,11 +122,14 @@ instance Eq a => EqProp (Optional a) where
 instance Eq a => EqProp (List a) where
     (=-=) = eq
 
+instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
+    (=-=) = eq
 
 identityTrigger = undefined :: Identity (Int, Int, [Int])
 constantTrigger = undefined :: Constant (Int, Int, [Int]) (Int, Int, [Int])
 optionalTrigger = undefined :: Optional (Int, Int, [Int])
 listTrigger     = undefined :: List (Int, Int, [Int])
+threeTrigger    = undefined :: Three (Int, Int, [Int]) (Int, Int, [Int]) (Int, Int, [Int])
 
 main :: IO ()
 main = do
@@ -116,3 +137,4 @@ main = do
   quickBatch (traversable constantTrigger)
   quickBatch (traversable optionalTrigger)
   quickBatch (traversable listTrigger)
+  quickBatch (traversable threeTrigger)

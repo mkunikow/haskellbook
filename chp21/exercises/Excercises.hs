@@ -1,11 +1,11 @@
+
 module Exercises where
 
-import Data.Monoid  
-import Control.Monad  
-import Control.Applicative
-import Test.QuickCheck
-import Test.QuickCheck.Checkers
-import Test.QuickCheck.Classes
+import           Control.Applicative
+import           Data.Monoid
+import           Test.QuickCheck
+import           Test.QuickCheck.Checkers
+import           Test.QuickCheck.Classes
 
 -- 1. Identity
 newtype Identity a = Identity a deriving (Eq, Ord, Show)
@@ -119,7 +119,19 @@ instance Traversable (Bigger a) where
     traverse f (Bigger a b1 b2 b3) =  Bigger <$> pure a <*> f b1 <*> f b2 <*> f b3
     
 
+-- S
+data S n a = S (n a) a deriving (Eq, Show)
+
+instance Functor n  => Functor (S n) where
+    fmap = undefined
+
+instance Foldable n => Foldable (S n) where
+    foldMap = undefined
     
+instance Traversable n => Traversable (S n) where
+    traverse = undefined
+
+
     
 
 -- QuickCheck
@@ -145,6 +157,11 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Big a b) where
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Bigger a b) where
     arbitrary = Bigger <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
 
+
+instance (Arbitrary (n a), Arbitrary a) => Arbitrary (S n a) where
+    arbitrary = liftA2 S arbitrary arbitrary
+
+    
 instance Eq a => EqProp (Identity a) where
     (=-=) = eq
       
@@ -166,6 +183,10 @@ instance (Eq a, Eq b) => EqProp (Big a b) where
 instance (Eq a, Eq b) => EqProp (Bigger a b) where
     (=-=) = eq
 
+instance (Eq a, Eq (n a)) => EqProp (S n a) where 
+    (=-=) = eq
+    
+
 identityTrigger = undefined :: Identity (Int, Int, [Int])
 constantTrigger = undefined :: Constant (Int, Int, [Int]) (Int, Int, [Int])
 optionalTrigger = undefined :: Optional (Int, Int, [Int])
@@ -173,6 +194,7 @@ listTrigger     = undefined :: List (Int, Int, [Int])
 threeTrigger    = undefined :: Three (Int, Int, [Int]) (Int, Int, [Int]) (Int, Int, [Int])
 bigTrigger      = undefined :: Big (Int, Int, [Int]) (Int, Int, [Int]) 
 biggerTrigger   = undefined :: Bigger (Int, Int, [Int]) (Int, Int, [Int])
+triggerS        = undefined :: S [] (Int, Int, [Int])
 
 main :: IO ()
 main = do

@@ -103,6 +103,22 @@ instance Foldable (Big a) where
 
 instance Traversable (Big a) where
     traverse f (Big a b1 b2) = liftA3 Big (pure a) (f b1) (f b2)
+
+
+--  Bigger
+
+data Bigger a b = Bigger a b b b deriving (Eq, Ord, Show)
+
+instance Functor (Bigger a) where
+    fmap f (Bigger a b1 b2 b3) = Bigger a (f b1) (f b2) (f b3)
+
+instance Foldable (Bigger a) where
+    foldMap f (Bigger a b1 b2 b3) = f b1 <> f b2 <> f b3
+
+instance Traversable (Bigger a) where
+    traverse f (Bigger a b1 b2 b3) =  Bigger <$> pure a <*> f b1 <*> f b2 <*> f b3
+    
+
     
     
 
@@ -126,6 +142,9 @@ instance (Arbitrary a, Arbitrary b, Arbitrary c) => Arbitrary (Three a b c ) whe
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Big a b) where
     arbitrary = liftA3 Big arbitrary arbitrary arbitrary
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Bigger a b) where
+    arbitrary = Bigger <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+
 instance Eq a => EqProp (Identity a) where
     (=-=) = eq
       
@@ -144,12 +163,16 @@ instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
 instance (Eq a, Eq b) => EqProp (Big a b) where
     (=-=) = eq
 
+instance (Eq a, Eq b) => EqProp (Bigger a b) where
+    (=-=) = eq
+
 identityTrigger = undefined :: Identity (Int, Int, [Int])
 constantTrigger = undefined :: Constant (Int, Int, [Int]) (Int, Int, [Int])
 optionalTrigger = undefined :: Optional (Int, Int, [Int])
 listTrigger     = undefined :: List (Int, Int, [Int])
 threeTrigger    = undefined :: Three (Int, Int, [Int]) (Int, Int, [Int]) (Int, Int, [Int])
 bigTrigger      = undefined :: Big (Int, Int, [Int]) (Int, Int, [Int]) 
+biggerTrigger   = undefined :: Bigger (Int, Int, [Int]) (Int, Int, [Int])
 
 main :: IO ()
 main = do
@@ -159,3 +182,4 @@ main = do
   quickBatch (traversable listTrigger)
   quickBatch (traversable threeTrigger)
   quickBatch (traversable bigTrigger)
+  quickBatch (traversable biggerTrigger)

@@ -123,13 +123,13 @@ instance Traversable (Bigger a) where
 data S n a = S (n a) a deriving (Eq, Show)
 
 instance Functor n  => Functor (S n) where
-    fmap = undefined
+    fmap f ( S n a) =  S (f <$> n) (f a)
 
 instance Foldable n => Foldable (S n) where
-    foldMap = undefined
+    foldMap f (S n a) = foldMap f n <> f a
     
 instance Traversable n => Traversable (S n) where
-    traverse = undefined
+    traverse f (S n a) = liftA2 S (traverse f n) (f a)
 
 
     

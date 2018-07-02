@@ -92,7 +92,7 @@ instance Traversable (Three a b) where
     -- traverse f (Three a b c) = Three <$> pure a <*> pure b <*> f c
     traverse f (Three a b c) = liftA3 Three (pure a) (pure b) (f c)
 
--- Big
+-- 6. Big
 data Big a b = Big a b b deriving (Eq, Ord, Show)
 
 instance Functor (Big a) where
@@ -105,7 +105,7 @@ instance Traversable (Big a) where
     traverse f (Big a b1 b2) = liftA3 Big (pure a) (f b1) (f b2)
 
 
---  Bigger
+-- 7. Bigger
 
 data Bigger a b = Bigger a b b b deriving (Eq, Ord, Show)
 
@@ -119,7 +119,7 @@ instance Traversable (Bigger a) where
     traverse f (Bigger a b1 b2 b3) =  Bigger <$> pure a <*> f b1 <*> f b2 <*> f b3
     
 
--- S
+-- 8. S
 data S n a = S (n a) a deriving (Eq, Show)
 
 instance Functor n  => Functor (S n) where
@@ -194,7 +194,7 @@ listTrigger     = undefined :: List (Int, Int, [Int])
 threeTrigger    = undefined :: Three (Int, Int, [Int]) (Int, Int, [Int]) (Int, Int, [Int])
 bigTrigger      = undefined :: Big (Int, Int, [Int]) (Int, Int, [Int]) 
 biggerTrigger   = undefined :: Bigger (Int, Int, [Int]) (Int, Int, [Int])
-triggerS        = undefined :: S [] (Int, Int, [Int])
+sTrigger        = undefined :: S [] (Int, Int, [Int])
 
 main :: IO ()
 main = do
@@ -205,3 +205,4 @@ main = do
   quickBatch (traversable threeTrigger)
   quickBatch (traversable bigTrigger)
   quickBatch (traversable biggerTrigger)
+  quickBatch (traversable sTrigger)

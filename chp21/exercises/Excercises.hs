@@ -131,7 +131,34 @@ instance Foldable n => Foldable (S n) where
 instance Traversable n => Traversable (S n) where
     traverse f (S n a) = liftA2 S (traverse f n) (f a)
 
+-- 9 Tree
 
+data Tree a =
+    Empty
+    | Leaf a
+    | Node (Tree a) a (Tree a)
+    deriving (Eq, Show)
+
+instance Functor Tree where
+    fmap _ Empty = Empty
+    fmap f (Leaf a) = Leaf (f a)
+    fmap f (Node lt a rt) = Node (fmap f lt) (f a) (fmap f rt)
+
+instance Foldable Tree where
+    foldMap _ Empty = mempty
+    foldMap f (Leaf a) = f a
+    foldMap f (Node lt a rt) = foldMap f lt <> f a <> foldMap f rt
+
+instance Traversable Tree where
+    traverse _ Empty = pure Empty
+    traverse f (Leaf a) =  Leaf <$> f a
+    traverse f (Node lt a rt) = liftA3 Node (traverse f lt) (f a) (traverse f rt)
+        
+
+
+
+
+    
     
 
 -- QuickCheck
@@ -161,6 +188,14 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Bigger a b) where
 instance (Arbitrary (n a), Arbitrary a) => Arbitrary (S n a) where
     arbitrary = liftA2 S arbitrary arbitrary
 
+instance Arbitrary a => Arbitrary (Tree a) where
+    arbitrary = frequency
+        [
+            (10, return Empty),
+            (5, Leaf <$> arbitrary),
+            (3, liftA3 Node arbitrary arbitrary arbitrary)
+        ]
+
     
 instance Eq a => EqProp (Identity a) where
     (=-=) = eq
@@ -186,6 +221,8 @@ instance (Eq a, Eq b) => EqProp (Bigger a b) where
 instance (Eq a, Eq (n a)) => EqProp (S n a) where 
     (=-=) = eq
     
+instance Eq a => EqProp (Tree a) where
+    (=-=) = eq
 
 identityTrigger = undefined :: Identity (Int, Int, [Int])
 constantTrigger = undefined :: Constant (Int, Int, [Int]) (Int, Int, [Int])
@@ -195,6 +232,7 @@ threeTrigger    = undefined :: Three (Int, Int, [Int]) (Int, Int, [Int]) (Int, I
 bigTrigger      = undefined :: Big (Int, Int, [Int]) (Int, Int, [Int]) 
 biggerTrigger   = undefined :: Bigger (Int, Int, [Int]) (Int, Int, [Int])
 sTrigger        = undefined :: S [] (Int, Int, [Int])
+treeTrigger     = undefined :: Tree (Int, Int, [Int])
 
 main :: IO ()
 main = do
@@ -206,3 +244,4 @@ main = do
   quickBatch (traversable bigTrigger)
   quickBatch (traversable biggerTrigger)
   quickBatch (traversable sTrigger)
+  quickBatch (traversable treeTrigger)

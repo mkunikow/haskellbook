@@ -4,6 +4,7 @@ module Main where
 
 import Control.Monad (replicateM)
 import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as BC
 import Data.Text.Encoding (decodeUtf8, encodeUtf8)
 import qualified Data.Text.Lazy as TL
@@ -88,7 +89,16 @@ app rConn = do
           where tbs :: TL.Text
                 tbs = TL.fromStrict (decodeUtf8 bs)
 
+
+app' :: ReaderT R.Connection ScottyM  ()
+app' = ask >>= (ReaderT <$> const app)
+
 main :: IO ()
 main = do
   rConn <- R.connect R.defaultConnectInfo
   scotty 3000 (app rConn)
+
+main' :: IO ()
+main' = do
+  rConn <- R.connect R.defaultConnectInfo
+  scotty 3000 (runReaderT app' rConn)
